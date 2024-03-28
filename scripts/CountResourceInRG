@@ -1,0 +1,9 @@
+Resources
+| summarize count() by subscriptionId, resourceGroup
+| join kind=leftouter (
+    ResourceContainers
+    | where type=='microsoft.resources/subscriptions'
+    | project SubName=name, subscriptionId
+) on subscriptionId
+| project SubName, resourceGroup, count_
+| order by SubName, count_ desc
